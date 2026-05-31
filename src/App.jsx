@@ -13,7 +13,13 @@ import MemoryVault from './components/MemoryVault';
 import FullScreenPlayer from './components/FullScreenPlayer';
 import './App.css';
 
-// Database of relationship milestone tracks
+// Helper to generate Spotify search URL for a track
+const getSpotifyUrl = (title, artist) => {
+  const query = encodeURIComponent(`${title} ${artist.split(',')[0].trim()}`);
+  return `https://open.spotify.com/search/${query}`;
+};
+
+// Database of relationship milestone tracks with YouTube audio
 const TRACKS = [
   {
     id: 'c1',
@@ -22,9 +28,11 @@ const TRACKS = [
     album: 'Jab We Met',
     date: 'June 15, 2023',
     year: '2023',
-    duration: 180, // 3:00
+    duration: 180,
     icon: '/sample-couple/Gemini_Generated_Image_1cgfo81cgfo81cgf.png',
-    desc: 'Holding onto the seat, running behind me, and letting go. That was the day I learned to fly.'
+    desc: 'Holding onto the seat, running behind me, and letting go. That was the day I learned to fly.',
+    spotifyUrl: getSpotifyUrl('Tum Se Hi', 'Mohit Chauhan'),
+    youtubeId: 'Cb6wuzOurPc'
   },
   {
     id: 'c2',
@@ -35,7 +43,9 @@ const TRACKS = [
     year: '2024',
     duration: 180,
     icon: '/sample-couple/Gemini_Generated_Image_1sv3a21sv3a21sv3.png',
-    desc: 'Under a canopy of stars, listening to you spin tales of old adventures by the cracking fire.'
+    desc: 'Under a canopy of stars, listening to you spin tales of old adventures by the cracking fire.',
+    spotifyUrl: getSpotifyUrl('Subhanallah', 'Sreerama Chandra'),
+    youtubeId: 'QYO6AlxiRE4'
   },
   {
     id: 'c3',
@@ -46,7 +56,9 @@ const TRACKS = [
     year: '2024',
     duration: 180,
     icon: '/sample-couple/Gemini_Generated_Image_2f0qew2f0qew2f0q.png',
-    desc: 'Patiently showing me how to cast. The look of pure pride on your face was bigger than the catch.'
+    desc: 'Patiently showing me how to cast. The look of pure pride on your face was bigger than the catch.',
+    spotifyUrl: getSpotifyUrl('Raabta', 'Arijit Singh'),
+    youtubeId: 'zlt38OOqwDc'
   },
   {
     id: 'c4',
@@ -57,7 +69,9 @@ const TRACKS = [
     year: '2025',
     duration: 180,
     icon: '/sample-couple/Gemini_Generated_Image_2skbkv2skbkv2skb.png',
-    desc: 'When you showed me that doing the right thing, even when no one is looking, defines your true character.'
+    desc: 'When you showed me that doing the right thing, even when no one is looking, defines your true character.',
+    spotifyUrl: getSpotifyUrl('Tujh Mein Rab Dikhta Hai', 'Roop Kumar Rathod'),
+    youtubeId: 'qoq8B8ThgEM'
   },
   {
     id: 't1',
@@ -68,7 +82,9 @@ const TRACKS = [
     year: '2024',
     duration: 180,
     icon: '/sample-couple/Gemini_Generated_Image_6jmnus6jmnus6jmn.png',
-    desc: 'Finding a quiet wooden cabin café in the mountain woods and watching the pine silhouettes in the sunset glow.'
+    desc: 'Finding a quiet wooden cabin café in the mountain woods and watching the pine silhouettes in the sunset glow.',
+    spotifyUrl: getSpotifyUrl('Saibo', 'Tochi Raina'),
+    youtubeId: '9Bmh6vaQt0s'
   },
   {
     id: 't2',
@@ -79,7 +95,9 @@ const TRACKS = [
     year: '2024',
     duration: 180,
     icon: '/sample-couple/Gemini_Generated_Image_7ax92t7ax92t7ax9.png',
-    desc: 'Dancing to our favorite indie band on the lawn back-row with bags of popcorn and starry skies.'
+    desc: 'Dancing to our favorite indie band on the lawn back-row with bags of popcorn and starry skies.',
+    spotifyUrl: getSpotifyUrl('Kesariya', 'Arijit Singh'),
+    youtubeId: 'BddP6PYo2gs'
   },
   {
     id: 't3',
@@ -90,7 +108,9 @@ const TRACKS = [
     year: '2024',
     duration: 180,
     icon: '/sample-couple/Gemini_Generated_Image_8e16pj8e16pj8e16.png',
-    desc: 'Surprise cheese board and lemonade on the warm sand, defending our sandwiches from ambitious seagulls.'
+    desc: 'Surprise cheese board and lemonade on the warm sand, defending our sandwiches from ambitious seagulls.',
+    spotifyUrl: getSpotifyUrl('Pehla Nasha', 'Udit Narayan'),
+    youtubeId: 'ODu7OyAqK-Q'
   },
   {
     id: 't4',
@@ -101,7 +121,9 @@ const TRACKS = [
     year: '2025',
     duration: 180,
     icon: '/sample-couple/Gemini_Generated_Image_9gv16v9gv16v9gv1.png',
-    desc: 'Celebrating our anniversary with fancy formal clothes, gourmet menus, and making plans for seasons to come.'
+    desc: 'Celebrating our anniversary with fancy formal clothes, gourmet menus, and making plans for seasons to come.',
+    spotifyUrl: getSpotifyUrl('Agar Tum Saath Ho', 'Arijit Singh'),
+    youtubeId: 'sK7riqg2mr4'
   }
 ];
 
@@ -113,6 +135,7 @@ export default function App() {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const [trackDuration, setTrackDuration] = useState(180);
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState('none'); // 'none' | 'all' | 'one'
   const [likedSongs, setLikedSongs] = useState(() => {
@@ -131,37 +154,147 @@ export default function App() {
   const currentChordIdx = useRef(0);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
-  // Synthesize beautiful pentatonic arpeggio chimes when track is actively playing
-  const playTrackChime = () => {
-    try {
-      if (!audioCtxRef.current) {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (AudioContext) audioCtxRef.current = new AudioContext();
-      }
-      if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
-        audioCtxRef.current.resume();
-      }
-      if (audioCtxRef.current && audioCtxRef.current.state === 'running') {
-        const now = audioCtxRef.current.currentTime;
-        const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99]; // C4, E4, G4, C5, E5, G5
-        const index = Math.floor(Math.random() * notes.length);
-        const freq = notes[index];
+  // YouTube Player Refs
+  const ytPlayerRef = useRef(null);
+  const ytReadyRef = useRef(false);
+  const ytTimePollerRef = useRef(null);
+  const pendingTrackRef = useRef(null);
+  const isPlayingRef = useRef(false);
+  const currentTrackRef = useRef(null);
+  const shuffleRef = useRef(false);
+  const repeatRef = useRef('none');
 
-        const osc = audioCtxRef.current.createOscillator();
-        const gain = audioCtxRef.current.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now);
-        
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.015, now + 0.05); // soft swell
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4); // ring out
-        
-        osc.connect(gain);
-        gain.connect(audioCtxRef.current.destination);
-        osc.start(now);
-        osc.stop(now + 1.6);
+  // Keep refs in sync with state
+  useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
+  useEffect(() => { currentTrackRef.current = currentTrack; }, [currentTrack]);
+  useEffect(() => { shuffleRef.current = shuffle; }, [shuffle]);
+  useEffect(() => { repeatRef.current = repeat; }, [repeat]);
+
+  // Initialize YouTube IFrame Player API
+  useEffect(() => {
+    const initPlayer = () => {
+      if (!window.YT || !window.YT.Player) return;
+      ytPlayerRef.current = new window.YT.Player('yt-player', {
+        height: '1',
+        width: '1',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          modestbranding: 1,
+          rel: 0,
+          showinfo: 0,
+          iv_load_policy: 3,
+          playsinline: 1
+        },
+        events: {
+          onReady: () => {
+            ytReadyRef.current = true;
+            // If a track was queued before player was ready, play it now
+            if (pendingTrackRef.current) {
+              const track = pendingTrackRef.current;
+              pendingTrackRef.current = null;
+              loadYouTubeTrack(track);
+            }
+          },
+          onStateChange: (event) => {
+            // YT.PlayerState.ENDED === 0
+            if (event.data === 0) {
+              handleTrackFinishedYT();
+            }
+          },
+          onError: (event) => {
+            console.warn('YouTube player error:', event.data);
+          }
+        }
+      });
+    };
+
+    // YouTube API might already be loaded or we wait for the callback
+    if (window.YT && window.YT.Player) {
+      initPlayer();
+    } else {
+      window.onYouTubeIframeAPIReady = initPlayer;
+    }
+
+    return () => {
+      if (ytTimePollerRef.current) clearInterval(ytTimePollerRef.current);
+    };
+  }, []);
+
+  // Load and play a YouTube track
+  const loadYouTubeTrack = (track) => {
+    if (!ytReadyRef.current || !ytPlayerRef.current) {
+      pendingTrackRef.current = track;
+      return;
+    }
+    try {
+      ytPlayerRef.current.loadVideoById({
+        videoId: track.youtubeId,
+        startSeconds: 0
+      });
+    } catch (e) {
+      console.warn('Failed to load YouTube track:', e);
+    }
+  };
+
+  // Start polling YouTube player for currentTime & duration
+  const startYTPoller = () => {
+    if (ytTimePollerRef.current) clearInterval(ytTimePollerRef.current);
+    ytTimePollerRef.current = setInterval(() => {
+      if (ytPlayerRef.current && typeof ytPlayerRef.current.getCurrentTime === 'function') {
+        try {
+          const t = ytPlayerRef.current.getCurrentTime();
+          const d = ytPlayerRef.current.getDuration();
+          if (t !== undefined && !isNaN(t)) setCurrentTime(t);
+          if (d && !isNaN(d) && d > 0) setTrackDuration(d);
+        } catch (e) {}
       }
-    } catch (e) {}
+    }, 500);
+  };
+
+  const stopYTPoller = () => {
+    if (ytTimePollerRef.current) {
+      clearInterval(ytTimePollerRef.current);
+      ytTimePollerRef.current = null;
+    }
+  };
+
+  // Handle track finished from YouTube player state change
+  const handleTrackFinishedYT = () => {
+    const rep = repeatRef.current;
+    const shuf = shuffleRef.current;
+    const ct = currentTrackRef.current;
+    if (rep === 'one') {
+      // Replay same track
+      if (ytPlayerRef.current && typeof ytPlayerRef.current.seekTo === 'function') {
+        ytPlayerRef.current.seekTo(0, true);
+        ytPlayerRef.current.playVideo();
+      }
+      setCurrentTime(0);
+    } else {
+      // Go to next track
+      if (!ct) return;
+      let nextIdx = 0;
+      if (shuf) {
+        nextIdx = Math.floor(Math.random() * TRACKS.length);
+      } else {
+        const currentIdx = TRACKS.findIndex(t => t.id === ct.id);
+        nextIdx = (currentIdx + 1) % TRACKS.length;
+        if (currentIdx === TRACKS.length - 1 && rep === 'none') {
+          setIsPlaying(false);
+          setCurrentTime(0);
+          stopYTPoller();
+          return;
+        }
+      }
+      const nextTrack = TRACKS[nextIdx];
+      setCurrentTrack(nextTrack);
+      setCurrentTime(0);
+      setIsPlaying(true);
+      loadYouTubeTrack(nextTrack);
+    }
   };
 
   // Browser History API integration to prevent exit on Back button
@@ -172,6 +305,10 @@ export default function App() {
       } else {
         // Return to Intro screen if no history state is left
         stopAmbientMusic();
+        if (ytPlayerRef.current && typeof ytPlayerRef.current.pauseVideo === 'function') {
+          try { ytPlayerRef.current.pauseVideo(); } catch(e) {}
+        }
+        stopYTPoller();
         setActiveProfile(null);
         setCurrentTrack(null);
         setIsPlaying(false);
@@ -192,25 +329,25 @@ export default function App() {
     localStorage.setItem('spotifyLikedSongs', JSON.stringify(likedSongs));
   }, [likedSongs]);
 
-  // Sync player ticking and chime generation when track is playing
+  // Sync YouTube play/pause with isPlaying state
   useEffect(() => {
-    let interval = null;
-    if (isPlaying && currentTrack) {
-      interval = setInterval(() => {
-        playTrackChime();
-        setCurrentTime(prevTime => {
-          if (prevTime >= currentTrack.duration) {
-            handleTrackFinished();
-            return prevTime;
-          }
-          return prevTime + 1;
-        });
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, currentTrack, shuffle, repeat]);
+    if (!ytPlayerRef.current || !ytReadyRef.current) return;
+    try {
+      if (isPlaying && currentTrack) {
+        const state = ytPlayerRef.current.getPlayerState();
+        // YT.PlayerState: PLAYING=1, PAUSED=2, BUFFERING=3, CUED=5
+        if (state === 2 || state === 5) {
+          ytPlayerRef.current.playVideo();
+        }
+        startYTPoller();
+      } else {
+        if (typeof ytPlayerRef.current.pauseVideo === 'function') {
+          ytPlayerRef.current.pauseVideo();
+        }
+        stopYTPoller();
+      }
+    } catch (e) {}
+  }, [isPlaying, currentTrack]);
 
   // Audio synthesis: Chords Cmaj7 -> Am7 -> Fmaj7 -> G6
   const chords = [
@@ -305,7 +442,10 @@ export default function App() {
   const handlePlayTrack = (track) => {
     setCurrentTrack(track);
     setCurrentTime(0);
+    setTrackDuration(track.duration || 180);
     setIsPlaying(true);
+    loadYouTubeTrack(track);
+    startYTPoller();
   };
 
   const handleTogglePlay = () => {
@@ -313,14 +453,6 @@ export default function App() {
       setIsPlaying(!isPlaying);
     } else {
       handlePlayTrack(TRACKS[0]);
-    }
-  };
-
-  const handleTrackFinished = () => {
-    if (repeat === 'one') {
-      setCurrentTime(0);
-    } else {
-      handleNext();
     }
   };
 
@@ -332,10 +464,10 @@ export default function App() {
     } else {
       const currentIdx = TRACKS.findIndex(t => t.id === currentTrack.id);
       nextIdx = (currentIdx + 1) % TRACKS.length;
-      // If it's the last song and repeat is none, stop playing
       if (currentIdx === TRACKS.length - 1 && repeat === 'none') {
         setIsPlaying(false);
         setCurrentTime(0);
+        stopYTPoller();
         return;
       }
     }
@@ -345,13 +477,25 @@ export default function App() {
   const handlePrev = () => {
     if (!currentTrack) return;
     if (currentTime > 3) {
+      // Seek to beginning of current track
       setCurrentTime(0);
+      if (ytPlayerRef.current && typeof ytPlayerRef.current.seekTo === 'function') {
+        try { ytPlayerRef.current.seekTo(0, true); } catch(e) {}
+      }
       return;
     }
     const currentIdx = TRACKS.findIndex(t => t.id === currentTrack.id);
     let prevIdx = currentIdx - 1;
     if (prevIdx < 0) prevIdx = TRACKS.length - 1;
     handlePlayTrack(TRACKS[prevIdx]);
+  };
+
+  // Seek handler for progress bar — syncs YouTube player
+  const handleSeek = (newTime) => {
+    setCurrentTime(newTime);
+    if (ytPlayerRef.current && typeof ytPlayerRef.current.seekTo === 'function') {
+      try { ytPlayerRef.current.seekTo(newTime, true); } catch(e) {}
+    }
   };
 
   const handleToggleLike = (trackId) => {
@@ -606,8 +750,8 @@ export default function App() {
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         currentTime={currentTime}
-        setCurrentTime={setCurrentTime}
-        duration={currentTrack ? currentTrack.duration : 180}
+        setCurrentTime={handleSeek}
+        duration={trackDuration}
         onNext={handleNext}
         onPrev={handlePrev}
         shuffle={shuffle}
@@ -627,7 +771,7 @@ export default function App() {
         onClose={() => setLyricsOpen(false)}
         currentTrack={currentTrack}
         currentTime={currentTime}
-        setCurrentTime={setCurrentTime}
+        setCurrentTime={handleSeek}
         activeProfile={activeProfile}
       />
 
@@ -639,7 +783,8 @@ export default function App() {
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         currentTime={currentTime}
-        setCurrentTime={setCurrentTime}
+        setCurrentTime={handleSeek}
+        duration={trackDuration}
         onNext={handleNext}
         onPrev={handlePrev}
         shuffle={shuffle}

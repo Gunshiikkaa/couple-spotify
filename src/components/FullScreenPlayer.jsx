@@ -85,6 +85,7 @@ export default function FullScreenPlayer({
   setIsPlaying,
   currentTime,
   setCurrentTime,
+  duration: durationProp,
   onNext,
   onPrev,
   shuffle,
@@ -138,12 +139,12 @@ export default function FullScreenPlayer({
     const clickX = e.clientX - rect.left;
     const width = rect.width;
     const percentage = Math.max(0, Math.min(1, clickX / width));
-    setCurrentTime(percentage * currentTrack.duration);
+    setCurrentTime(percentage * duration);
   };
 
   if (!currentTrack) return null;
 
-  const duration = currentTrack.duration;
+  const duration = durationProp || currentTrack.duration || 180;
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
   const isLiked = !!likedSongs[currentTrack.id];
 

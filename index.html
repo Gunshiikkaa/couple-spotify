@@ -8,6 +8,11 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Hidden YouTube player container for audio-only playback -->
+    <div id="yt-player-container" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;opacity:0;z-index:-1;">
+      <div id="yt-player"></div>
+    </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
