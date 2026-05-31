@@ -10,6 +10,7 @@ import BlendView from './components/BlendView';
 import DatePlanner from './components/DatePlanner';
 import LettersView from './components/LettersView';
 import MemoryVault from './components/MemoryVault';
+import FullScreenPlayer from './components/FullScreenPlayer';
 import './App.css';
 
 // Database of relationship milestone tracks
@@ -119,6 +120,7 @@ export default function App() {
     return saved ? JSON.parse(saved) : {};
   });
   const [lyricsOpen, setLyricsOpen] = useState(false);
+  const [fullScreenOpen, setFullScreenOpen] = useState(false);
 
   // Search State
   const [searchQuery, setSearchQuery] = useState('');
@@ -498,6 +500,7 @@ export default function App() {
         onToggleLike={handleToggleLike}
         lyricsOpen={lyricsOpen}
         setLyricsOpen={setLyricsOpen}
+        onOpenFullScreen={() => setFullScreenOpen(true)}
       />
 
       {/* Synchronized Lyrics Overlay Drawer */}
@@ -507,6 +510,26 @@ export default function App() {
         currentTrack={currentTrack}
         currentTime={currentTime}
         setCurrentTime={setCurrentTime}
+        activeProfile={activeProfile}
+      />
+
+      {/* Immersive Full Screen Player */}
+      <FullScreenPlayer 
+        isOpen={fullScreenOpen}
+        onClose={() => setFullScreenOpen(false)}
+        currentTrack={currentTrack}
+        isPlaying={isPlaying}
+        setIsPlaying={setIsPlaying}
+        currentTime={currentTime}
+        setCurrentTime={setCurrentTime}
+        onNext={handleNext}
+        onPrev={handlePrev}
+        shuffle={shuffle}
+        setShuffle={setShuffle}
+        repeat={repeat}
+        setRepeat={setRepeat}
+        likedSongs={likedSongs}
+        onToggleLike={handleToggleLike}
         activeProfile={activeProfile}
       />
     </div>

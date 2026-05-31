@@ -16,7 +16,8 @@ export default function PlayerBar({
   likedSongs,
   onToggleLike,
   lyricsOpen,
-  setLyricsOpen
+  setLyricsOpen,
+  onOpenFullScreen
 }) {
   const progressBarRef = useRef(null);
 
@@ -55,7 +56,11 @@ export default function PlayerBar({
     <div className="player-bar">
       {/* Left side: Track details */}
       <div className="player-track-info">
-        <div className={`player-art ${isPlaying ? 'playing' : ''}`}>
+        <div 
+          className={`player-art ${isPlaying ? 'playing' : ''}`}
+          onClick={onOpenFullScreen}
+          title="Expand"
+        >
           {currentTrack.icon || '🎵'}
         </div>
         <div className="player-metadata">
