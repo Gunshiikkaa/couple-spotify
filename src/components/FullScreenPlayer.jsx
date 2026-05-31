@@ -170,7 +170,11 @@ export default function FullScreenPlayer({
         {/* Left Side: Artwork, Meta, Like */}
         <div className="fsp-left">
           <div className={`fsp-art-wrapper ${isPlaying ? 'playing' : ''}`}>
-            {currentTrack.icon || '🎵'}
+            {currentTrack.icon && (currentTrack.icon.startsWith('/') || currentTrack.icon.includes('.png')) ? (
+              <img src={currentTrack.icon} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} />
+            ) : (
+              currentTrack.icon || '🎵'
+            )}
           </div>
           
           <div className="fsp-metadata">

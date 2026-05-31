@@ -189,7 +189,11 @@ export default function TimelineView({ tracks, currentTrack, isPlaying, onPlayTr
                   <td>
                     <div className="track-title-col">
                       <div className="track-art">
-                        {track.icon || '🎵'}
+                        {track.icon && (track.icon.startsWith('/') || track.icon.includes('.png')) ? (
+                          <img src={track.icon} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                        ) : (
+                          track.icon || '🎵'
+                        )}
                       </div>
                       <div className="track-name-wrapper">
                         <span className="track-name-txt">{track.title}</span>

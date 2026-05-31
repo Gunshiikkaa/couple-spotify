@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import html2canvas from 'html2canvas';
 
 export default function BlendView({ activeProfile }) {
   const [showShareModal, setShowShareModal] = useState(false);
+  const cardRef = useRef(null);
   const compatibilityScore = 98.4;
 
   const sharedGenres = [
@@ -36,6 +38,24 @@ export default function BlendView({ activeProfile }) {
     } catch (e) {}
     
     setShowShareModal(true);
+  };
+
+  const handleDownload = () => {
+    if (cardRef.current) {
+      // Temporarily hide the close button or ensure it is not inside cardRef
+      html2canvas(cardRef.current, {
+        backgroundColor: null,
+        scale: 2, // Double quality for premium crisp image downloads
+        logging: false,
+        useCORS: true
+      }).then(canvas => {
+        const image = canvas.toDataURL("image/png");
+        const link = document.createElement('a');
+        link.download = `SpotiLove-Blend-Card.png`;
+        link.href = image;
+        link.click();
+      });
+    }
   };
 
   return (
@@ -120,50 +140,74 @@ export default function BlendView({ activeProfile }) {
               <button 
                 className="modal-close" 
                 onClick={() => setShowShareModal(false)}
-                style={{ position: 'absolute', right: '0', top: '-10px', fontSize: '1.25rem' }}
+                style={{ position: 'absolute', right: '0', top: '-10px', fontSize: '1.25rem', zIndex: 10 }}
               >
                 ✕
               </button>
               
-              <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🧪</div>
-              <h2 style={{ fontFamily: 'var(--font-montserrat)', fontWeight: 800, fontSize: '1.5rem', marginBottom: '4px' }}>SpotiLove Blend</h2>
-              <span style={{ fontSize: '0.75rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '20px' }}>
-                VATSAL + MUSKAN
-              </span>
-
-              {/* Card visual representation */}
-              <div style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '8px',
-                padding: '24px 16px',
-                marginBottom: '20px'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '-20px', marginBottom: '16px' }}>
-                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'var(--accent-blue)', display: 'flex', alignItems: 'center', justifyItem: 'center', justifyContent: 'center', fontSize: '1.5rem', border: '2px solid #fff', zIndex: 1 }}>👔</div>
-                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'var(--love-pink)', display: 'flex', alignItems: 'center', justifyItem: 'center', justifyContent: 'center', fontSize: '1.5rem', border: '2px solid #fff', marginLeft: '-15px', zIndex: 2 }}>👑</div>
+              {/* Card wrapper to download */}
+              <div 
+                ref={cardRef} 
+                style={{ 
+                  background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)',
+                  padding: '16px 8px',
+                  borderRadius: '12px'
+                }}
+              >
+                <div style={{ width: '54px', height: '54px', borderRadius: '50%', margin: '0 auto 12px', overflow: 'hidden', border: '2px solid var(--spotify-green)', boxShadow: '0 0 10px rgba(29, 185, 84, 0.4)' }}>
+                  <img src="/sample-couple/Gemini_Generated_Image_wyjtibwyjtibwyjt.png" alt="US" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
-                <div style={{ fontSize: '2.2rem', fontWeight: 900, fontFamily: 'var(--font-montserrat)', color: 'var(--spotify-green)' }}>
-                  {compatibilityScore}%
-                </div>
-                <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: '#fff', display: 'block', marginTop: '4px' }}>
-                  COMPATIBILITY SCORE
+                <h2 style={{ fontFamily: 'var(--font-montserrat)', fontWeight: 800, fontSize: '1.5rem', marginBottom: '4px', color: '#fff' }}>SpotiLove Blend</h2>
+                <span style={{ fontSize: '0.75rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '20px' }}>
+                  VATSAL + MUSKAN
                 </span>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '12px', lineHeight: 1.4 }}>
-                  "We match on cozy coffee store dates, long drives, and acoustic whispers. Our love genre is defined as Cozy-Romantic-Acoustics."
-                </p>
-              </div>
 
-              <div style={{ fontSize: '0.75rem', color: 'var(--spotify-green)', fontWeight: 800 }}>
-                💖 CRAFTED WITH LOVE FOREVER 💖
+                {/* Card visual representation */}
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '8px',
+                  padding: '24px 16px',
+                  marginBottom: '20px'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2px solid #fff', zIndex: 1, overflow: 'hidden' }}>
+                      <img src="/sample-couple/Gemini_Generated_Image_unc07lunc07lunc0.png" alt="Vatsal" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2px solid #fff', marginLeft: '-15px', zIndex: 2, overflow: 'hidden' }}>
+                      <img src="/sample-couple/Gemini_Generated_Image_w10zbaw10zbaw10z.png" alt="Muskan" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '2.2rem', fontWeight: 900, fontFamily: 'var(--font-montserrat)', color: 'var(--spotify-green)' }}>
+                    {compatibilityScore}%
+                  </div>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: '#fff', display: 'block', marginTop: '4px' }}>
+                    COMPATIBILITY SCORE
+                  </span>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '12px', lineHeight: 1.4 }}>
+                    "We match on cozy coffee store dates, long drives, and acoustic whispers. Our love genre is defined as Cozy-Romantic-Acoustics."
+                  </p>
+                </div>
+
+                <div style={{ fontSize: '0.75rem', color: 'var(--spotify-green)', fontWeight: 800 }}>
+                  💖 CRAFTED WITH LOVE FOREVER 💖
+                </div>
               </div>
 
               <button 
                 className="modal-btn-submit" 
-                style={{ width: '100%', marginTop: '20px', borderRadius: '4px' }}
+                style={{ width: '100%', marginTop: '20px', borderRadius: '4px', backgroundColor: 'var(--spotify-green)', color: '#000' }}
+                onClick={handleDownload}
+              >
+                Download Card
+              </button>
+              
+              <button 
+                className="modal-btn-cancel" 
+                style={{ width: '100%', marginTop: '12px', border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text-muted)', fontWeight: 700 }}
                 onClick={() => setShowShareModal(false)}
               >
-                Close & Save Card
+                Close
               </button>
             </div>
           </div>

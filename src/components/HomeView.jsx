@@ -17,9 +17,13 @@ export default function HomeView({ activeProfile, tracks, onPlayTrack, setActive
   const [spotlightQuote, setSpotlightQuote] = useState(() => 
     localStorage.getItem('spotifySpotlightQuote') || "You never know the value of a moment, until it becomes a memory that stays with you forever."
   );
-  const [spotlightIcon, setSpotlightIcon] = useState(() => 
-    localStorage.getItem('spotifySpotlightIcon') || "❤️"
-  );
+  const [spotlightIcon, setSpotlightIcon] = useState(() => {
+    const saved = localStorage.getItem('spotifySpotlightIcon');
+    if (!saved || saved === '❤️') {
+      return '/sample-couple/Gemini_Generated_Image_tzfox1tzfox1tzfo.png';
+    }
+    return saved;
+  });
 
   useEffect(() => {
     localStorage.setItem('spotifySpotlightTitle', spotlightTitle);
@@ -70,7 +74,11 @@ export default function HomeView({ activeProfile, tracks, onPlayTrack, setActive
               onClick={() => onPlayTrack(track)}
             >
               <div className="recent-art">
-                {track.icon || '🎵'}
+                {track.icon && (track.icon.startsWith('/') || track.icon.includes('.png')) ? (
+                  <img src={track.icon} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                ) : (
+                  track.icon || '🎵'
+                )}
               </div>
               <div className="recent-info">
                 <span className="recent-title">{track.title}</span>
@@ -95,7 +103,11 @@ export default function HomeView({ activeProfile, tracks, onPlayTrack, setActive
         <h2 className="section-title">Featured Album of the Month</h2>
         <div className="spotlight-banner">
           <div className="spotlight-art-side">
-            {spotlightIcon}
+            {spotlightIcon && (spotlightIcon.startsWith('/') || spotlightIcon.includes('.png')) ? (
+              <img src={spotlightIcon} alt="Spotlight Cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              spotlightIcon
+            )}
             <div className="spotlight-badge">FEATURED</div>
           </div>
           <div className="spotlight-text-side">
@@ -141,8 +153,8 @@ export default function HomeView({ activeProfile, tracks, onPlayTrack, setActive
 
           {/* Vatsal's Favorites Card */}
           <div className="spotify-card" onClick={() => setActiveTab('letter')}>
-            <div className="card-art-wrapper" style={{ background: 'linear-gradient(135deg, #1e3a8a 0%, #000000 100%)' }}>
-              👔
+            <div className="card-art-wrapper">
+              <img src="/sample-couple/Gemini_Generated_Image_eh9dqveh9dqveh9d.png" alt="Vatsal's Mix" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <button className="card-play-btn" onClick={(e) => { e.stopPropagation(); setActiveTab('letter'); }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="5 3 19 12 5 21 5 3"/>
@@ -155,8 +167,8 @@ export default function HomeView({ activeProfile, tracks, onPlayTrack, setActive
 
           {/* Muskan's Favorites Card */}
           <div className="spotify-card" onClick={() => setActiveTab('letter')}>
-            <div className="card-art-wrapper" style={{ background: 'linear-gradient(135deg, #881337 0%, #000000 100%)' }}>
-              👑
+            <div className="card-art-wrapper">
+              <img src="/sample-couple/Gemini_Generated_Image_evnaeaevnaeaevna.png" alt="Muskan's Mix" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <button className="card-play-btn" onClick={(e) => { e.stopPropagation(); setActiveTab('letter'); }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="5 3 19 12 5 21 5 3"/>
@@ -169,8 +181,8 @@ export default function HomeView({ activeProfile, tracks, onPlayTrack, setActive
 
           {/* Roadtrip Mix */}
           <div className="spotify-card" onClick={() => setActiveTab('timeline')}>
-            <div className="card-art-wrapper" style={{ background: 'linear-gradient(135deg, #b45309 0%, #f59e0b 100%)' }}>
-              🚗
+            <div className="card-art-wrapper">
+              <img src="/sample-couple/Gemini_Generated_Image_f9gchwf9gchwf9gc.png" alt="Roadtrip Mix" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <button className="card-play-btn" onClick={(e) => { e.stopPropagation(); setActiveTab('timeline'); }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="5 3 19 12 5 21 5 3"/>

@@ -61,7 +61,11 @@ export default function PlayerBar({
           onClick={onOpenFullScreen}
           title="Expand"
         >
-          {currentTrack.icon || '🎵'}
+          {currentTrack.icon && (currentTrack.icon.startsWith('/') || currentTrack.icon.includes('.png')) ? (
+            <img src={currentTrack.icon} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+          ) : (
+            currentTrack.icon || '🎵'
+          )}
         </div>
         <div className="player-metadata">
           <span className="player-track-name">{currentTrack.title}</span>

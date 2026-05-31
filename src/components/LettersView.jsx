@@ -68,6 +68,12 @@ export default function LettersView({ activeProfile }) {
   const currentGradient = isVatsal 
     ? 'linear-gradient(180deg, #1e3a8a 0%, #121212 100%)' 
     : 'linear-gradient(180deg, #881337 0%, #121212 100%)';
+  const currentArtistImage = isVatsal 
+    ? '/sample-couple/Gemini_Generated_Image_ikvmbnikvmbnikvm.png' 
+    : '/sample-couple/Gemini_Generated_Image_jwgu8wjwgu8wjwgu.png';
+  const currentBioImage = isVatsal 
+    ? '/sample-couple/Gemini_Generated_Image_k2e22uk2e22uk2e2.png'
+    : '/sample-couple/Gemini_Generated_Image_ngpyw2ngpyw2ngpy.png';
 
   return (
     <div className="letters-view">
@@ -102,7 +108,14 @@ export default function LettersView({ activeProfile }) {
       </div>
 
       {/* Spotify Artist Header */}
-      <div className="artist-header" style={{ backgroundImage: currentGradient }}>
+      <div 
+        className="artist-header" 
+        style={{ 
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.75)), url(${currentArtistImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
         <div className="artist-header-content">
           <div className="artist-verified">
             <span className="artist-verified-badge">✓</span>
@@ -139,7 +152,14 @@ export default function LettersView({ activeProfile }) {
       <div className="artist-body">
         {activeSubTab === 'bio' && (
           <div className="artist-about-section">
-            <div className="about-bio-card" style={{ background: isVatsal ? 'linear-gradient(135deg, #1e3a8a, #000)' : 'linear-gradient(135deg, #881337, #000)' }}>
+            <div 
+              className="about-bio-card" 
+              style={{ 
+                backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.9)), url(${currentBioImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
+            >
               <div className="about-bio-content">
                 <span className="about-bio-lbl">ARTIST SPOTLIGHT BIO</span>
                 <p className="about-bio-txt">
@@ -184,17 +204,23 @@ export default function LettersView({ activeProfile }) {
             <h3 className="section-title">Memory Polaroids</h3>
             <div className="cards-row">
               <div className="spotify-card">
-                <div className="card-art-wrapper" style={{ background: '#3e3e3e', fontSize: '2.5rem' }}>📷</div>
+                <div className="card-art-wrapper">
+                  <img src="/sample-couple/Gemini_Generated_Image_p7rptjp7rptjp7rp.png" alt="Summer Trip" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
                 <span className="card-title">Summer Trip</span>
                 <span className="card-desc">Holding hands under the sunset cafe terrace.</span>
               </div>
               <div className="spotify-card">
-                <div className="card-art-wrapper" style={{ background: '#3e3e3e', fontSize: '2.5rem' }}>🏕️</div>
+                <div className="card-art-wrapper">
+                  <img src="/sample-couple/Gemini_Generated_Image_u5or10u5or10u5or.png" alt="Stargazing Camp" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
                 <span className="card-title">Stargazing Camp</span>
                 <span className="card-desc">Wrapped in wool blankets by the campfire.</span>
               </div>
               <div className="spotify-card">
-                <div className="card-art-wrapper" style={{ background: '#3e3e3e', fontSize: '2.5rem' }}>🏡</div>
+                <div className="card-art-wrapper">
+                  <img src="/sample-couple/Gemini_Generated_Image_ukc6i6ukc6i6ukc6.png" alt="New Home Vibe" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
                 <span className="card-title">New Home Vibe</span>
                 <span className="card-desc">Assembly instructions scattered all over the rug.</span>
               </div>

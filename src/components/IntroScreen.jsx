@@ -10,7 +10,8 @@ export default function IntroScreen({ onProfileSelect }) {
       gradient: 'linear-gradient(135deg, #1e3a8a, #3b82f6)',
       role: 'Boyfriend 👔',
       emoji: '👔',
-      badgeColor: '#2563eb'
+      badgeColor: '#2563eb',
+      img: '/sample-couple/Gemini_Generated_Image_unc07lunc07lunc0.png'
     },
     {
       name: 'Muskan',
@@ -18,7 +19,8 @@ export default function IntroScreen({ onProfileSelect }) {
       gradient: 'linear-gradient(135deg, #881337, #db2777)',
       role: 'Girlfriend 👑',
       emoji: '👑',
-      badgeColor: '#db2777'
+      badgeColor: '#db2777',
+      img: '/sample-couple/Gemini_Generated_Image_w10zbaw10zbaw10z.png'
     },
     {
       name: 'US',
@@ -26,7 +28,8 @@ export default function IntroScreen({ onProfileSelect }) {
       gradient: 'linear-gradient(135deg, #581c87, #a855f7)',
       role: 'The Couple 💖',
       emoji: '💖',
-      badgeColor: '#9333ea'
+      badgeColor: '#9333ea',
+      img: '/sample-couple/Gemini_Generated_Image_wyjtibwyjtibwyjt.png'
     }
   ];
 
@@ -97,9 +100,17 @@ export default function IntroScreen({ onProfileSelect }) {
           >
             <div 
               className="avatar-wrapper"
-              style={{ background: profile.gradient }}
+              style={{ background: profile.img ? 'none' : profile.gradient }}
             >
-              {profile.letter}
+              {profile.img ? (
+                <img 
+                  src={profile.img} 
+                  alt={profile.name} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                />
+              ) : (
+                profile.letter
+              )}
               <div 
                 className="role-badge" 
                 style={{ borderColor: profile.badgeColor }}

@@ -23,7 +23,7 @@ const TRACKS = [
     date: 'June 15, 2023',
     year: '2023',
     duration: 180, // 3:00
-    icon: '🚲',
+    icon: '/sample-couple/Gemini_Generated_Image_1cgfo81cgfo81cgf.png',
     desc: 'Holding onto the seat, running behind me, and letting go. That was the day I learned to fly.'
   },
   {
@@ -34,7 +34,7 @@ const TRACKS = [
     date: 'October 12, 2024',
     year: '2024',
     duration: 180,
-    icon: '🔥',
+    icon: '/sample-couple/Gemini_Generated_Image_1sv3a21sv3a21sv3.png',
     desc: 'Under a canopy of stars, listening to you spin tales of old adventures by the cracking fire.'
   },
   {
@@ -45,7 +45,7 @@ const TRACKS = [
     date: 'July 8, 2024',
     year: '2024',
     duration: 180,
-    icon: '🎣',
+    icon: '/sample-couple/Gemini_Generated_Image_2f0qew2f0qew2f0q.png',
     desc: 'Patiently showing me how to cast. The look of pure pride on your face was bigger than the catch.'
   },
   {
@@ -56,7 +56,7 @@ const TRACKS = [
     date: 'September 5, 2025',
     year: '2025',
     duration: 180,
-    icon: '🌟',
+    icon: '/sample-couple/Gemini_Generated_Image_2skbkv2skbkv2skb.png',
     desc: 'When you showed me that doing the right thing, even when no one is looking, defines your true character.'
   },
   {
@@ -67,7 +67,7 @@ const TRACKS = [
     date: 'May 12, 2024',
     year: '2024',
     duration: 180,
-    icon: '☕',
+    icon: '/sample-couple/Gemini_Generated_Image_6jmnus6jmnus6jmn.png',
     desc: 'Finding a quiet wooden cabin café in the mountain woods and watching the pine silhouettes in the sunset glow.'
   },
   {
@@ -78,7 +78,7 @@ const TRACKS = [
     date: 'August 18, 2024',
     year: '2024',
     duration: 180,
-    icon: '🎸',
+    icon: '/sample-couple/Gemini_Generated_Image_7ax92t7ax92t7ax9.png',
     desc: 'Dancing to our favorite indie band on the lawn back-row with bags of popcorn and starry skies.'
   },
   {
@@ -89,7 +89,7 @@ const TRACKS = [
     date: 'July 5, 2024',
     year: '2024',
     duration: 180,
-    icon: '🧺',
+    icon: '/sample-couple/Gemini_Generated_Image_8e16pj8e16pj8e16.png',
     desc: 'Surprise cheese board and lemonade on the warm sand, defending our sandwiches from ambitious seagulls.'
   },
   {
@@ -100,7 +100,7 @@ const TRACKS = [
     date: 'October 24, 2025',
     year: '2025',
     duration: 180,
-    icon: '✨',
+    icon: '/sample-couple/Gemini_Generated_Image_9gv16v9gv16v9gv1.png',
     desc: 'Celebrating our anniversary with fancy formal clothes, gourmet menus, and making plans for seasons to come.'
   }
 ];
@@ -404,7 +404,13 @@ export default function App() {
                       className="recent-card"
                       onClick={() => handlePlayTrack(track)}
                     >
-                      <div className="recent-art">{track.icon}</div>
+                      <div className="recent-art">
+                        {track.icon && (track.icon.startsWith('/') || track.icon.includes('.png')) ? (
+                          <img src={track.icon} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                        ) : (
+                          track.icon || '🎵'
+                        )}
+                      </div>
                       <div className="recent-info">
                         <span className="recent-title">{track.title}</span>
                         <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{track.album}</span>

@@ -39,8 +39,16 @@ export default function Header({ activeProfile, onSwitchProfile, isMusicPlaying,
           className="user-profile-badge" 
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
-          <div className="user-avatar" style={{ background: activeProfile.gradient }}>
-            {activeProfile.letter}
+          <div className="user-avatar" style={{ background: activeProfile.img ? 'none' : activeProfile.gradient }}>
+            {activeProfile.img ? (
+              <img 
+                src={activeProfile.img} 
+                alt="" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+              />
+            ) : (
+              activeProfile.letter
+            )}
           </div>
           <span>{activeProfile.name}</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
