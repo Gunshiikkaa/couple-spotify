@@ -450,6 +450,55 @@ export default function App() {
         )}
 
         {/* Tab Routing */}
+        {activeTab === 'library' && (
+          <div className="content-section" style={{ padding: '32px 16px 40px' }}>
+            <h1 className="playlist-name" style={{ fontSize: '2rem', marginBottom: '24px' }}>Your Library</h1>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {[
+                { id: 'vault', title: 'Liked Songs', desc: 'Playlist • Memories', icon: '💖', color: 'var(--love-pink)' },
+                { id: 'timeline', title: 'Our Timeline', desc: 'Playlist • Milestones', icon: '📜', color: '#f59e0b' },
+                { id: 'blend', title: 'Our Blend', desc: 'Playlist • Compatibility', icon: '🧪', color: 'var(--spotify-green)' },
+                { id: 'planner', title: 'Date Planner', desc: 'Podcast • Future Plans', icon: '📅', color: 'var(--accent-blue)' },
+                { id: 'letter', title: 'Secret Letters', desc: 'Profile • Message Board', icon: '💌', color: 'var(--accent-purple)' }
+              ].map((pl) => (
+                <div 
+                  key={pl.id} 
+                  className="recent-card" 
+                  onClick={() => setActiveTab(pl.id)}
+                  style={{ 
+                    padding: '12px 16px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '16px', 
+                    cursor: 'pointer', 
+                    backgroundColor: 'rgba(255, 255, 255, 0.04)', 
+                    borderRadius: '6px',
+                    transition: 'background-color 0.2s'
+                  }}
+                >
+                  <div style={{ 
+                    width: '52px', 
+                    height: '52px', 
+                    borderRadius: '4px', 
+                    background: pl.color, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    fontSize: '1.6rem', 
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+                    flexShrink: 0
+                  }}>
+                    {pl.icon}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'hidden' }}>
+                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{pl.title}</span>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{pl.desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {activeTab === 'home' && (
           <HomeView 
             activeProfile={activeProfile} 

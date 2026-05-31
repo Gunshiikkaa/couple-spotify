@@ -55,10 +55,9 @@ export default function PlayerBar({
   return (
     <div className="player-bar">
       {/* Left side: Track details */}
-      <div className="player-track-info">
+      <div className="player-track-info" onClick={onOpenFullScreen} style={{ cursor: 'pointer' }}>
         <div 
           className={`player-art ${isPlaying ? 'playing' : ''}`}
-          onClick={onOpenFullScreen}
           title="Expand"
         >
           {currentTrack.icon && (currentTrack.icon.startsWith('/') || currentTrack.icon.includes('.png')) ? (
@@ -73,7 +72,10 @@ export default function PlayerBar({
         </div>
         <button 
           className={`player-like-btn ${isLiked ? 'liked' : ''}`}
-          onClick={() => onToggleLike(currentTrack.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleLike(currentTrack.id);
+          }}
           title={isLiked ? 'Remove from Liked Songs' : 'Add to Liked Songs'}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill={isLiked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

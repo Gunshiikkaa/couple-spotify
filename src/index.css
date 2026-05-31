@@ -2374,3 +2374,117 @@ input, textarea, button {
   opacity: 1;
 }
 
+/* --- MOBILE RESPONSIVE OVERRIDES --- */
+
+.mobile-only {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: flex !important;
+  }
+  
+  /* Layout modifications */
+  .header {
+    padding: 0 16px;
+  }
+  .header-navigation {
+    display: none;
+  }
+  
+  /* Grids & Cards */
+  .content-section {
+    padding: 16px;
+  }
+  .cards-row {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+    gap: 12px !important;
+  }
+  .spotify-card {
+    padding: 10px !important;
+  }
+  .card-art-wrapper {
+    margin-bottom: 8px !important;
+    font-size: 3rem !important;
+  }
+  
+  /* Banner / Spotlight adjustments */
+  .spotlight-banner {
+    margin: 20px 0 !important;
+  }
+  .spotlight-art-side {
+    max-height: 220px !important;
+    font-size: 5rem !important;
+  }
+  .spotlight-text-side {
+    padding: 20px !important;
+  }
+  
+  /* Tracklist Table Responsiveness */
+  .tracklist-table th:nth-child(3),
+  .tracklist-table td:nth-child(3),
+  .tracklist-table th:nth-child(4),
+  .tracklist-table td:nth-child(4),
+  .tracklist-table th:nth-child(5),
+  .tracklist-table td:nth-child(5) {
+    display: none !important;
+  }
+  
+  .table-wrapper {
+    padding: 0 12px 24px !important;
+  }
+  .tracklist-table {
+    padding: 0 !important;
+  }
+  .track-row td {
+    padding: 8px !important;
+  }
+  .track-number-col {
+    width: 40px !important;
+    padding-right: 12px !important;
+  }
+  .track-number-col .row-play-icon {
+    right: 8px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .episode-card {
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 16px !important;
+  }
+  .episode-art {
+    width: 64px !important;
+    height: 64px !important;
+    font-size: 2rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-list {
+    gap: 20px !important;
+  }
+  .profile-card {
+    width: 100px !important;
+  }
+  .avatar-wrapper {
+    width: 100px !important;
+    height: 100px !important;
+    font-size: 2rem !important;
+  }
+  .role-badge {
+    font-size: 0.6rem !important;
+    padding: 3px 6px !important;
+    bottom: 4px !important;
+  }
+  .player-buttons {
+    gap: 12px !important;
+  }
+  .control-btn {
+    padding: 4px !important;
+  }
+}
+
+

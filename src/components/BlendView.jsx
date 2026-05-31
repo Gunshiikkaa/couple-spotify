@@ -128,6 +128,7 @@ export default function BlendView({ activeProfile }) {
             className="modal-content" 
             onClick={(e) => e.stopPropagation()} 
             style={{ 
+              width: '100%',
               maxWidth: '380px', 
               background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)',
               border: '2px solid var(--spotify-green)',
