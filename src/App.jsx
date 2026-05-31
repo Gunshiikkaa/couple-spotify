@@ -131,16 +131,73 @@ export default function App() {
   const currentChordIdx = useRef(0);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
+  // Synthesize beautiful pentatonic arpeggio chimes when track is actively playing
+  const playTrackChime = () => {
+    try {
+      if (!audioCtxRef.current) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtxRef.current = new AudioContext();
+      }
+      if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume();
+      }
+      if (audioCtxRef.current && audioCtxRef.current.state === 'running') {
+        const now = audioCtxRef.current.currentTime;
+        const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99]; // C4, E4, G4, C5, E5, G5
+        const index = Math.floor(Math.random() * notes.length);
+        const freq = notes[index];
+
+        const osc = audioCtxRef.current.createOscillator();
+        const gain = audioCtxRef.current.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.015, now + 0.05); // soft swell
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.4); // ring out
+        
+        osc.connect(gain);
+        gain.connect(audioCtxRef.current.destination);
+        osc.start(now);
+        osc.stop(now + 1.6);
+      }
+    } catch (e) {}
+  };
+
+  // Browser History API integration to prevent exit on Back button
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state && event.state.tab) {
+        setActiveTab(event.state.tab);
+      } else {
+        // Return to Intro screen if no history state is left
+        stopAmbientMusic();
+        setActiveProfile(null);
+        setCurrentTrack(null);
+        setIsPlaying(false);
+        setActiveTab('home');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const changeTab = (tab) => {
+    setActiveTab(tab);
+    window.history.pushState({ tab }, '', `#${tab}`);
+  };
+
   // Save liked songs to localStorage
   useEffect(() => {
     localStorage.setItem('spotifyLikedSongs', JSON.stringify(likedSongs));
   }, [likedSongs]);
 
-  // Sync player ticking when track is playing
+  // Sync player ticking and chime generation when track is playing
   useEffect(() => {
     let interval = null;
     if (isPlaying && currentTrack) {
       interval = setInterval(() => {
+        playTrackChime();
         setCurrentTime(prevTime => {
           if (prevTime >= currentTrack.duration) {
             handleTrackFinished();
@@ -321,16 +378,22 @@ export default function App() {
     });
   };
 
+  const handleProfileSelect = (profile) => {
+    setActiveProfile(profile);
+    window.history.pushState({ tab: 'home' }, '', '#home');
+  };
+
   const handleSwitchProfile = () => {
     stopAmbientMusic();
     setActiveProfile(null);
     setCurrentTrack(null);
     setIsPlaying(false);
     setActiveTab('home');
+    window.history.pushState(null, '', window.location.pathname);
   };
 
   if (!activeProfile) {
-    return <IntroScreen onProfileSelect={setActiveProfile} />;
+    return <IntroScreen onProfileSelect={handleProfileSelect} />;
   }
 
   // Filter tracks for search tab query
@@ -342,7 +405,7 @@ export default function App() {
   return (
     <div className="main-layout">
       {/* Sidebar navigation */}
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar activeTab={activeTab} setActiveTab={changeTab} />
 
       {/* Main content body */}
       <div className="content-wrapper">
@@ -464,7 +527,7 @@ export default function App() {
                 <div 
                   key={pl.id} 
                   className="recent-card" 
-                  onClick={() => setActiveTab(pl.id)}
+                  onClick={() => changeTab(pl.id)}
                   style={{ 
                     padding: '12px 16px', 
                     display: 'flex', 
@@ -504,7 +567,7 @@ export default function App() {
             activeProfile={activeProfile} 
             tracks={TRACKS}
             onPlayTrack={handlePlayTrack}
-            setActiveTab={setActiveTab}
+            setActiveTab={changeTab}
           />
         )}
         {activeTab === 'timeline' && (

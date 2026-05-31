@@ -74,11 +74,11 @@ input, textarea, button {
 @media (max-width: 768px) {
   .main-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 60px 80px;
+    grid-template-rows: 1fr 64px 60px;
     grid-template-areas:
       "content"
-      "sidebar"
-      "player";
+      "player"
+      "sidebar";
   }
 }
 
@@ -1481,9 +1481,10 @@ input, textarea, button {
 @media (max-width: 768px) {
   .player-bar {
     grid-area: player;
-    grid-template-columns: 1fr auto;
-    padding: 0 8px;
-    height: 80px;
+    grid-template-columns: 1fr auto auto !important;
+    padding: 0 12px !important;
+    height: 64px !important;
+    position: relative !important;
   }
 }
 
@@ -2446,6 +2447,72 @@ input, textarea, button {
   }
   .track-number-col .row-play-icon {
     right: 8px !important;
+  }
+
+  /* Compact Mobile Player Bar Overrides */
+  .player-controls-container {
+    display: flex !important;
+    flex-direction: row !important;
+    width: auto !important;
+    max-width: none !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    justify-self: flex-end !important;
+  }
+  .player-buttons {
+    gap: 0 !important;
+  }
+  /* Hide all buttons on mobile bar except play/pause */
+  .player-buttons .control-btn {
+    display: none !important;
+  }
+  .player-buttons .control-btn-play {
+    display: flex !important;
+  }
+  /* Show actions (lyrics button) on mobile */
+  .player-actions {
+    display: flex !important;
+    gap: 8px !important;
+    margin-left: 8px !important;
+    justify-self: flex-end !important;
+  }
+  .player-actions .volume-bar {
+    display: none !important;
+  }
+  .player-actions .action-btn {
+    display: flex !important;
+    color: var(--text-muted) !important;
+  }
+  .player-actions .action-btn.active {
+    color: var(--spotify-green) !important;
+  }
+  
+  /* Bottom Edge Thin Progress Line */
+  .player-progress-bar {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 3px !important;
+    display: flex !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 210 !important;
+  }
+  .player-progress-bar .progress-time {
+    display: none !important;
+  }
+  .player-progress-bar .progress-slider-outer {
+    height: 3px !important;
+    border-radius: 0 !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+  .player-progress-bar .progress-slider-inner {
+    border-radius: 0 !important;
+    background-color: var(--spotify-green) !important;
+  }
+  .player-progress-bar .progress-handle {
+    display: none !important;
   }
 }
 
